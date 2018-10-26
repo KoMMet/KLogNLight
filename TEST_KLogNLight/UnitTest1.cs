@@ -12,9 +12,9 @@ namespace TEST_KLogNLight
         public void LevelContains()
         {
             var loglevel = LogLevel.GetInstance;
-            loglevel.SetLevel(new List<string>(){"Info","Debug"});
-            Assert.True(loglevel.Contains("Info"));
-            Assert.True(loglevel.Contains("Debug"));
+            loglevel.SetLevel(new List<string>(){"INfo","DeBUg"});
+            Assert.True(loglevel.Contains("InfO"));
+            Assert.True(loglevel.Contains("DEBUg"));
             Assert.False(loglevel.Contains("Error"));
             loglevel.Clear();
         }
@@ -102,6 +102,34 @@ namespace TEST_KLogNLight
                     klog.Info("inner");
                 }
             }
+            loglevel.Clear();
+        }
+
+        //運用で回避
+        //こういう書き方はしない！！！！
+        [Fact]
+        public void Write_task_illigal()
+        {
+            var loglevel = LogLevel.GetInstance;
+            loglevel.SetLevel(new List<string>(){"info"});
+
+            var t = Task.Run(() =>
+            {
+                using (ILogger klog = new KLogger("taskilligal.txt"))
+                {
+                    for (int i = 0; i < 20; i++)
+                    {
+                        klog.Info("message test");
+                    }
+                }
+            });
+            ILogger klog1 = new KLogger("taskilligal2.txt",":::");
+            for (int i = 0; i < 50; i++)
+            {
+                klog1.Info("main task message test");
+            }
+            Task.WaitAll(t);
+            klog1.Dispose();
         }
     }
 }

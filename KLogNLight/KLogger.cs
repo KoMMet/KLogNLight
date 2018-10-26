@@ -84,48 +84,78 @@ namespace KLogNLight
         public virtual string Operation(string mes)
         {
             if (!CheckContainsLevel("Operation")) return "";
-            string ret = messageCat(sb, "[Operation]", CheckMessage(mes), delimita);
-            fileope.Write(ret);
+            string ret;
+            lock (lockobj)
+            {
+                ret = messageCat(sb, "[Operation]", CheckMessage(mes), delimita);
+                fileope.Write(ret);
+            }
+
             return ret;
         }
 
         public virtual string Debug(string mes)
         {
             if (!CheckContainsLevel("Debug")) return "";
-            string ret = messageCat(sb, "[Debug]", CheckMessage(mes), delimita);
-            fileope.Write(ret);
+            string ret;
+            lock (lockobj)
+            {
+                ret = messageCat(sb, "[Debug]", CheckMessage(mes), delimita);
+                fileope.Write(ret);
+            }
+
             return ret;
         }
 
         public virtual string Trace(string mes)
         {
             if (!CheckContainsLevel("Trace")) return "";
-            string ret = messageCat(sb, "[Trace]", CheckMessage(mes), delimita);
-            fileope.Write(ret);
+            string ret;
+            lock (lockobj)
+            {
+                ret = messageCat(sb, "[Trace]", CheckMessage(mes), delimita);
+                fileope.Write(ret);
+            }
+
             return ret;
         }
 
         public virtual string Warn(string mes)
         {
             if (!CheckContainsLevel("Warn")) return "";
-            string ret = messageCat(sb, "[Warn]", CheckMessage(mes), delimita);
-            fileope.Write(ret);
+            string ret;
+            lock (lockobj)
+            {
+                ret = messageCat(sb, "[Warn]", CheckMessage(mes), delimita);
+                fileope.Write(ret);
+            }
+
             return ret;
         }
 
         public virtual string Error(string mes)
         {
             if (!CheckContainsLevel("Error")) return "";
-            string ret = messageCat(sb, "[Error]", CheckMessage(mes), delimita);
-            fileope.Write(ret);
+            string ret;
+            lock (lockobj)
+            {
+                ret = messageCat(sb, "[Error]", CheckMessage(mes), delimita);
+                fileope.Write(ret);
+            }
+
             return ret;
         }
 
         public virtual string Fatal(string mes)
         {
             if (!CheckContainsLevel("Fatal")) return "";
-            string ret = messageCat(sb, "[Fatal]", CheckMessage(mes), delimita);
-            fileope.Write(ret);
+            string ret;
+            lock (lockobj)
+            {
+                ret = messageCat(sb, "[Fatal]", CheckMessage(mes), delimita);
+                fileope.Write(ret);
+            }
+
             return ret;
         }
 
@@ -175,11 +205,11 @@ namespace KLogNLight
             }
 
             var x = levels.SelectMany(level =>
-                LevelEvt.TryParse(level, out Level lv) ? new Level[] {lv} : new Level[] { });
+                LevelEvt.TryParse(level.ToUpper(), out Level lv) ? new Level[] {lv} : new Level[] { });
             foreach (var l in x)
             {
                 LevelList.Add(l);
-                setLevelValues.Add(l.ToString());
+                setLevelValues.Add(l.ToString().ToUpper());
             }
         }
 
@@ -191,7 +221,7 @@ namespace KLogNLight
 
         public bool Contains(string level)
         {
-            return setLevelValues.Contains(level);
+            return setLevelValues.Contains(level.ToUpper());
         }
 
         private IList<string> setLevelValues = new List<string>();
@@ -283,13 +313,13 @@ namespace KLogNLight
     }
     public enum Level
     {
-        None,
-        Info,
-        Operation,
-        Debug,
-        Trace,
-        Warn,
-        Error,
-        Fatal,
+        NONE,
+        INFO,
+        OPERATION,
+        DEBUG,
+        TRACE,
+        WARN,
+        ERROR,
+        FATAL,
     }
 }
