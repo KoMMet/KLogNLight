@@ -18,8 +18,8 @@ namespace KLogNLight
         {
             string result;
             //test
-            sb.Append("00:00");
-            //sb.Append(DateTime.Now);
+            //sb.Append("00:00");
+            sb.Append(DateTime.Now);
             sb.Append(delimita);
             sb.Append(kind);
 
